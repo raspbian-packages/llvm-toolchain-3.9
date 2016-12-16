@@ -1,0 +1,11 @@
+--- a/lldb/scripts/Python/finishSwigPythonLLDB.py
++++ b/lldb/scripts/Python/finishSwigPythonLLDB.py
+@@ -379,7 +379,7 @@
+             if eOSType == utilsOsType.EnumOsType.Darwin:
+                 strLibFileExtn = ".dylib"
+             else:
+-                strLibFileExtn = ".so"
++                strLibFileExtn = "-3.9.so"
+             strSrc = os.path.join(vstrLldbLibDir, "liblldb" + strLibFileExtn)
+ 
+     bOk, strErrMsg = make_symlink(vDictArgs, vstrFrameworkPythonDir, strSrc, strTarget)

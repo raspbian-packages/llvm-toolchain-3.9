@@ -1,0 +1,12 @@
+# I know but well...
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-dwarfdump-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-mc-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-mcmarkup-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-objdump-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-rtdyld-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-size-3.9.1.gz
+llvm-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/llvm-ranlib-3.9.1.gz
+# Does not link otherwise
+llvm-3.9: embedded-library usr/lib/llvm-3.9/bin/bugpoint: libjsoncpp
+llvm-3.9: embedded-library usr/lib/llvm-3.9/bin/opt: libjsoncpp
+
