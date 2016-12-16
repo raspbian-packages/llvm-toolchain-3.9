@@ -83,7 +83,7 @@ else()
   set(output_name "clang")
 endif()
 
-add_clang_library(libclang ${ENABLE_SHARED} ${ENABLE_STATIC}
+add_clang_library(libclang ${ENABLE_SHARED} ${ENABLE_STATIC} SONAME
   OUTPUT_NAME ${output_name}
   ${SOURCES}
   DEPENDS clang-headers
