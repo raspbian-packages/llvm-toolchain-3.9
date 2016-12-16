@@ -37,10 +37,14 @@
 // Project includes
 #include "ProcessGDBRemoteLog.h"
 
+#ifndef DEBIAN_VERSION_SUFFIX
+#define DEBIAN_VERSION_SUFFIX ""
+#endif
+
 #if defined(__APPLE__)
 # define DEBUGSERVER_BASENAME    "debugserver"
 #else
-# define DEBUGSERVER_BASENAME    "lldb-server"
+# define DEBUGSERVER_BASENAME    "lldb-server" DEBIAN_VERSION_SUFFIX
 #endif
 
 #if defined (HAVE_LIBCOMPRESSION)
