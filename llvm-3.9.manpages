@@ -1,0 +1,8 @@
+docs/_build/man/*
+debian/man/llvm-dwarfdump-3.9.1
+debian/man/llvm-mc-3.9.1
+debian/man/llvm-mcmarkup-3.9.1
+debian/man/llvm-objdump-3.9.1
+debian/man/llvm-rtdyld-3.9.1
+debian/man/llvm-size-3.9.1
+debian/man/llvm-ranlib-3.9.1

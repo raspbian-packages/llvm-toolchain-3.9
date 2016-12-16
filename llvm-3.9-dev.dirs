@@ -1,0 +1,5 @@
+/usr/lib/llvm-3.9/lib
+/usr/lib/llvm-3.9/build
+/usr/lib/llvm-3.9/include
+usr/share/doc/llvm-3.9-dev
+usr/share/emacs/site-lisp/llvm-3.9

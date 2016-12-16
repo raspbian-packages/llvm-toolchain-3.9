@@ -1,0 +1,41 @@
+Description: Add a hack to the cmake based build to force armv6 
+     unfortunately the cmake based build relies on config.guess 
+     (and gives no way to override it) and config.guess assumes you want
+     to build for the hardware you are running on).
+Author: Peter Michael Green <plugwash@raspbian.org>
+
+Index: llvm-toolchain-3.9-3.9.new/cmake/modules/GetHostTriple.cmake
+===================================================================
+--- llvm-toolchain-3.9-3.9.new.orig/cmake/modules/GetHostTriple.cmake
++++ llvm-toolchain-3.9-3.9.new/cmake/modules/GetHostTriple.cmake
+@@ -15,7 +15,7 @@ function( get_host_triple var )
+       set( value "i686-pc-mingw32" )
+     endif()
+   else( MSVC )
+-    set(config_guess ${LLVM_MAIN_SRC_DIR}/cmake/config.guess)
++    set(config_guess ${LLVM_MAIN_SRC_DIR}/cmake/config.guess.hack)
+     execute_process(COMMAND sh ${config_guess}
+       RESULT_VARIABLE TT_RV
+       OUTPUT_VARIABLE TT_OUT
+Index: llvm-toolchain-3.9-3.9.new/cmake/config.guess.hack
+===================================================================
+--- /dev/null
++++ llvm-toolchain-3.9-3.9.new/cmake/config.guess.hack
+@@ -0,0 +1,2 @@
++#!/bin/bash -e
++$(dirname "$0")/config.guess | sed -r s/arm[a-zA-Z0-9]*/armv6/
+Index: llvm-toolchain-3.9-3.9.new/compiler-rt/cmake/base-config-ix.cmake
+===================================================================
+--- llvm-toolchain-3.9-3.9.new.orig/compiler-rt/cmake/base-config-ix.cmake
++++ llvm-toolchain-3.9-3.9.new/compiler-rt/cmake/base-config-ix.cmake
+@@ -153,8 +153,8 @@ macro(test_targets)
+       test_target_arch(mips "" "-mips32r2" "--target=mips-linux-gnu")
+       test_target_arch(mips64 "" "-mips64r2" "--target=mips64-linux-gnu" "-mabi=64")
+     elseif("${COMPILER_RT_DEFAULT_TARGET_ARCH}" MATCHES "arm")
+-      test_target_arch(arm "" "-march=armv7-a" "-mfloat-abi=soft")
+-      test_target_arch(armhf "" "-march=armv7-a" "-mfloat-abi=hard")
++      test_target_arch(arm "" "" "-mfloat-abi=soft")
++      test_target_arch(armhf "" "" "-mfloat-abi=hard")
+     elseif("${COMPILER_RT_DEFAULT_TARGET_ARCH}" MATCHES "aarch32")
+       test_target_arch(aarch32 "" "-march=armv8-a")
+     elseif("${COMPILER_RT_DEFAULT_TARGET_ARCH}" MATCHES "aarch64")

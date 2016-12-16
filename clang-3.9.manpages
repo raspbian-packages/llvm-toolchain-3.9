@@ -1,0 +1,11 @@
+clang/docs/_build/man/clang-3.9.1
+clang/tools/scan-build/man/scan-build-3.9.1
+debian/man/clang-check-3.9.1
+debian/man/clang-rename-3.9.1
+debian/man/clang-query-3.9.1
+debian/man/clang-apply-replacements-3.9.1
+debian/man/sancov-3.9.1
+debian/man/scan-view-3.9.1
+debian/man/modularize-3.9.1
+debian/man/find-all-symbols-3.9.1
+debian/man/clang-include-fixer-3.9.1
