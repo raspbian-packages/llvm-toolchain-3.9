@@ -1,10 +1,10 @@
 set(LLVM_NO_RTTI 1)
 
-set(POLLY_JSON_FILES
-    JSON/json_reader.cpp
-    JSON/json_value.cpp
-    JSON/json_writer.cpp
-)
+# set(POLLY_JSON_FILES
+#     JSON/json_reader.cpp
+#     JSON/json_value.cpp
+#     JSON/json_writer.cpp
+# )
 
 set(ISL_CODEGEN_FILES
     CodeGen/IslAst.cpp
@@ -49,7 +49,7 @@ add_polly_library(Polly
   Support/RegisterPasses.cpp
   Support/ScopHelper.cpp
   Support/ScopLocation.cpp
-  ${POLLY_JSON_FILES}
+#  ${POLLY_JSON_FILES}
   Transform/Canonicalization.cpp
   Transform/CodePreparation.cpp
   Transform/DeadCodeElimination.cpp
@@ -61,7 +61,7 @@ if (GPU_CODEGEN)
   target_link_libraries(Polly PollyPPCG)
 endif (GPU_CODEGEN)
 
-target_link_libraries(Polly PollyISL)
+target_link_libraries(Polly PollyISL jsoncpp)
 
 if (BUILD_SHARED_LIBS)
   target_link_libraries(Polly
