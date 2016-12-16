@@ -392,7 +392,7 @@ def make_symlink_liblldb(vDictArgs, vstrFrameworkPythonDir, vstrLiblldbFileName,
             if eOSType == utilsOsType.EnumOsType.Darwin:
                 strLibFileExtn = ".dylib"
             else:
-                strLibFileExtn = ".so"
+                strLibFileExtn = "-3.9.so"
             strSrc = os.path.join(vstrLldbLibDir, "liblldb" + strLibFileExtn)
 
     bOk, strErrMsg = make_symlink(vDictArgs, vstrFrameworkPythonDir, strSrc, strTarget)
