@@ -2622,7 +2622,10 @@ class X86TargetInfo : public TargetInfo {
     FP_SSE,
     FP_387
   } FPMath = FP_Default;
-
+protected:
+  bool isCmpXChg8Supported() const {
+    return CPU >= CK_i586;
+  }
 public:
   X86TargetInfo(const llvm::Triple &Triple, const TargetOptions &)
       : TargetInfo(Triple) {
@@ -2714,6 +2717,8 @@ public:
     // acceptable.
     // FIXME: This results in terrible diagnostics. Clang just says the CPU is
     // invalid without explaining *why*.
+    if (!isCmpXChg8Supported())
+        MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 32;
     switch (CPU) {
     case CK_Generic:
       // No processor selected!
@@ -3743,7 +3748,7 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
     Builder.defineMacro("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2");
     Builder.defineMacro("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4");
   }
-  if (CPU >= CK_i586)
+  if (isCmpXChg8Supported())
     Builder.defineMacro("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8");
 }
 
@@ -4022,8 +4027,6 @@ public:
                              (1 << TargetInfo::LongDouble));
 
     // x86-32 has atomics up to 8 bytes
-    // FIXME: Check that we actually have cmpxchg8b before setting
-    // MaxAtomicInlineWidth. (cmpxchg8b is an i586 instruction.)
     MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 64;
   }
   BuiltinVaListKind getBuiltinVaListKind() const override {
