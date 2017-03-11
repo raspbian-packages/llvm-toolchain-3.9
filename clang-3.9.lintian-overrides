@@ -1,0 +1,9 @@
+# I know but well...
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/clang-check.1.gz
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/scan-view.1.gz
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/clang-apply-replacements-3.9.1.gz
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/clang-check-3.9.1.gz
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/clang-tblgen-3.9.1.gz
+clang-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/scan-view-3.9.1.gz
+# Does not link otherwise
+clang-3.9: embedded-library usr/lib/llvm-3.9/bin/clang: libjsoncpp

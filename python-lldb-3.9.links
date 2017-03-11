@@ -1,0 +1,6 @@
+usr/lib/arm-linux-gnueabihf/libLLVM-3.9.0.so.1 usr/lib/llvm-3.9/lib/python2.7/site-packages/lldb/libLLVM-3.9.0.so.1
+usr/lib/arm-linux-gnueabihf/libLLVM-3.9.0.so.1 usr/lib/llvm-3.9/lib/python2.7/site-packages/lldb/libLLVM-3.9.so.1
+usr/lib/arm-linux-gnueabihf/liblldb-3.9.so.1      usr/lib/llvm-3.9/lib/python2.7/site-packages/lldb/_lldb.so
+usr/lib/llvm-3.9/lib/python2.7/site-packages/lldb/ usr/lib/python2.7/dist-packages/lldb
+
+
