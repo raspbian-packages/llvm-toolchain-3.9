@@ -35,6 +35,7 @@ if sys.version_info.major >= 3:
         Linux = 3
         NetBSD = 4
         Windows = 5
+        kFreeBSD = 6
 else:
     class EnumOsType(object):
         values = ["Unknown",
@@ -42,7 +43,8 @@ else:
                   "FreeBSD",
                   "Linux",
                   "NetBSD",
-                  "Windows"]
+                  "Windows",
+                  "kFreeBSD"]
         class __metaclass__(type):
 #++---------------------------------------------------------------------------
 # Details:  Fn acts as an enumeration.
@@ -86,5 +88,7 @@ def determine_os_type():
         eOSType = EnumOsType.NetBSD
     elif strOS == "win32":
         eOSType = EnumOsType.Windows
+    elif strOS.startswith("gnukfreebsd"):
+        eOSType = EnumOsType.kFreeBSD
 
     return eOSType
