@@ -131,10 +131,13 @@ if (CUDALIB_FOUND)
   INCLUDE_DIRECTORIES( ${CUDALIB_INCLUDE_DIR} )
 endif(CUDALIB_FOUND)
 
+find_path(JSONCPP_INCLUDE_PATH json/json.h PATH_SUFFIXES jsoncpp)
+
 include_directories(
   BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/JSON/include
+#  ${CMAKE_CURRENT_SOURCE_DIR}/lib/JSON/include
+  ${JSONCPP_INCLUDE_PATH}
   ${CMAKE_CURRENT_BINARY_DIR}/lib/External/isl/include
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/External/isl/include
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/External/pet/include
