@@ -1,0 +1,3 @@
+# I know but well...
+clang-tidy-3.9: manpage-has-useless-whatis-entry usr/share/man/man1/clang-tidy-3.9.1.gz
+

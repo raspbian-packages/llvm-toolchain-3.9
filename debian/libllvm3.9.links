@@ -1,0 +1,4 @@
+# Should be uncommented for 3.9.1 and other
+# usr/lib/llvm-3.9/lib/libLLVM-3.9.so.1 /usr/lib/arm-linux-gnueabihf/libLLVM-3.9.so.1
+usr/lib/arm-linux-gnueabihf/libLLVM-3.9.so.1    /usr/lib/arm-linux-gnueabihf/libLLVM-3.9.so
+

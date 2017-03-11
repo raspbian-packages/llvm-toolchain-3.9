@@ -1,0 +1,7 @@
+usr/lib/llvm-3.9/lib/clang/3.9.0/include usr/include/clang/3.9/include
+usr/lib/llvm-3.9/lib/clang/3.9.0/include usr/lib/clang/3.9/include
+usr/lib/llvm-3.9/lib/clang/3.9.0/lib usr/lib/clang/3.9/lib
+usr/lib/llvm-3.9/lib/clang/3.9.0/include usr/include/clang/3.9.0/include
+usr/lib/llvm-3.9/lib/clang/3.9.0/include usr/lib/clang/3.9.0/include
+usr/lib/llvm-3.9/lib/clang/3.9.0/lib usr/lib/clang/3.9.0/lib
+

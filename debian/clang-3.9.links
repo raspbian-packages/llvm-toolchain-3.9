@@ -1,0 +1,4 @@
+usr/share/clang/scan-build-3.9/bin/scan-build  usr/bin/scan-build-3.9
+usr/share/clang/scan-build-3.9/bin/scan-build-py  usr/bin/scan-build-3.9-py
+usr/share/clang/scan-view-3.9/bin/scan-view    usr/bin/scan-view-3.9
+
