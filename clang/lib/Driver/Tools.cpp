@@ -848,7 +848,7 @@ arm::FloatABI arm::getARMFloatABI(const ToolChain &TC, const ArgList &Args) {
       case llvm::Triple::MuslEABI:
       case llvm::Triple::EABI:
         // EABI is always AAPCS, and if it was not marked 'hard', it's softfp
-        ABI = FloatABI::SoftFP;
+        ABI = FloatABI::Soft;
         break;
       case llvm::Triple::Android:
         ABI = (SubArch == 7) ? FloatABI::SoftFP : FloatABI::Soft;
