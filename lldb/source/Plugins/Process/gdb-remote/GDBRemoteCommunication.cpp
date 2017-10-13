@@ -40,7 +40,7 @@
 #if defined(__APPLE__)
 # define DEBUGSERVER_BASENAME    "debugserver"
 #else
-# define DEBUGSERVER_BASENAME    "lldb-server"
+# define DEBUGSERVER_BASENAME    "lldb-server-3.9"
 #endif
 
 #if defined (HAVE_LIBCOMPRESSION)
