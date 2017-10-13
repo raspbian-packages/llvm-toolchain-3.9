@@ -4282,6 +4282,20 @@ protected:
     Builder.defineMacro("__ELF__");
   }
 
+  static bool shouldUseInlineAtomic(const llvm::Triple &T) {
+    // On linux, binaries targeting old cpus call functions in libgcc to
+    // perform atomic operations. The implementation in libgcc then calls into
+    // the kernel which on armv6 and newer uses ldrex and strex. The net result
+    // is that if we assume the kernel is at least as recent as the hardware,
+    // it is safe to use atomic instructions on armv6 and newer.
+    if (T.getOS() != llvm::Triple::Linux)
+     return false;
+    StringRef ArchName = T.getArchName();
+    if (ArchName.startswith("armv6") || ArchName.startswith("armv7"))
+      return true;
+    return false;
+  }
+
 public:
   RTEMSTargetInfo(const llvm::Triple &Triple, const TargetOptions &Opts)
       : OSTargetInfo<Target>(Triple, Opts) {
