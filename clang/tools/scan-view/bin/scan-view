@@ -61,7 +61,7 @@ def start_browser(port, options):
 
 def run(port, options, root):
     # Prefer to look relative to the installed binary
-    share = os.path.dirname(__file__) + "/../share/scan-view"
+    share = os.path.dirname(__file__) + "/../share/"
     if not os.path.isdir(share):
         # Otherwise look relative to the source
         share = os.path.dirname(__file__) + "/../../scan-view/share"
