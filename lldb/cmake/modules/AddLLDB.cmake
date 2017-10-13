@@ -93,7 +93,7 @@ macro(add_lldb_library name)
 endmacro(add_lldb_library)
 
 macro(add_lldb_executable name)
-  add_llvm_executable(${name} DISABLE_LLVM_LINK_LLVM_DYLIB ${ARGN})
+  add_llvm_executable(${name} ${ARGN})
   set_target_properties(${name} PROPERTIES FOLDER "lldb executables")
 endmacro(add_lldb_executable)
 
