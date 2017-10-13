@@ -42,7 +42,7 @@ set_property(TARGET LLVM PROPERTY VERSION "1") # Append .1 to SONAME
 list(REMOVE_DUPLICATES LIB_NAMES)
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "GNU" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "kFreeBSD") # FIXME: It should be "GNU ld for elf"
   # GNU ld doesn't resolve symbols in the version script.
-  set(LIB_NAMES -Wl,--whole-archive ${LIB_NAMES} -Wl,--no-whole-archive)
+  set(LIB_NAMES -Wl,--version-script,${CMAKE_CURRENT_SOURCE_DIR}/simple_version_script.map -Wl,--whole-archive ${LIB_NAMES} -Wl,--no-whole-archive)
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   set(LIB_NAMES -Wl,-all_load ${LIB_NAMES})
 endif()
