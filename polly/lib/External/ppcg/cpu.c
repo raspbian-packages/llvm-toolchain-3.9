@@ -22,6 +22,7 @@
 #include "ppcg_options.h"
 #include "cpu.h"
 #include "print.h"
+#include "util.h"
 
 /* Representation of a statement inside a generated AST.
  *

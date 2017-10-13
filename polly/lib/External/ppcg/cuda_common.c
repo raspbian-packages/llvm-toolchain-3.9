@@ -14,6 +14,7 @@
 
 #include "cuda_common.h"
 #include "ppcg.h"
+#include "util.h"
 
 /* Open the host .cu file and the kernel .hu and .cu files for writing.
  * Add the necessary includes.
