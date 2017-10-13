@@ -91,7 +91,7 @@ if ($FindBin::Script =~ /c\+\+-analyzer/) {
   if (!defined $Compiler || (! -x $Compiler && ! SearchInPath($Compiler))) { $Compiler = $DefaultCXXCompiler; }
 
   $Clang = $ENV{'CLANG_CXX'};
-  if (!defined $Clang || ! -x $Clang) { $Clang = 'clang++'; }
+  if (!defined $Clang || ! -x $Clang) { $Clang = 'clang++-3.9'; }
 
   $IsCXX = 1
 }
@@ -100,7 +100,7 @@ else {
   if (!defined $Compiler || (! -x $Compiler && ! SearchInPath($Compiler))) { $Compiler = $DefaultCCompiler; }
 
   $Clang = $ENV{'CLANG'};
-  if (!defined $Clang || ! -x $Clang) { $Clang = 'clang'; }
+  if (!defined $Clang || ! -x $Clang) { $Clang = 'clang-3.9'; }
 
   $IsCXX = 0
 }
