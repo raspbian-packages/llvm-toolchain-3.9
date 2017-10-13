@@ -36,7 +36,7 @@
   :group 'tools)
 
 (defcustom clang-format-executable
-  (or (executable-find "clang-format")
+  (or (executable-find "clang-format-3.9")
       "clang-format")
   "Location of the clang-format executable.
 
