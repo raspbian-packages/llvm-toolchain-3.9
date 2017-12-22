@@ -1,0 +1,36 @@
+Index: llvm-toolchain-3.9-3.9.1/lldb/cmake/LLDBDependencies.cmake
+===================================================================
+--- llvm-toolchain-3.9-3.9.1.orig/lldb/cmake/LLDBDependencies.cmake
++++ llvm-toolchain-3.9-3.9.1/lldb/cmake/LLDBDependencies.cmake
+@@ -207,6 +207,7 @@ set(LLVM_LINK_COMPONENTS
+   option
+   support
+   coverage
++  DebugInfoPDB
+   )
+ 
+ if ( NOT LLDB_DISABLE_PYTHON )
+Index: llvm-toolchain-3.9-3.9.1/lldb/cmake/modules/AddLLDB.cmake
+===================================================================
+--- llvm-toolchain-3.9-3.9.1.orig/lldb/cmake/modules/AddLLDB.cmake
++++ llvm-toolchain-3.9-3.9.1/lldb/cmake/modules/AddLLDB.cmake
+@@ -93,7 +93,7 @@ macro(add_lldb_library name)
+ endmacro(add_lldb_library)
+ 
+ macro(add_lldb_executable name)
+-  add_llvm_executable(${name} DISABLE_LLVM_LINK_LLVM_DYLIB ${ARGN})
++  add_llvm_executable(${name} ${ARGN})
+   set_target_properties(${name} PROPERTIES FOLDER "lldb executables")
+ endmacro(add_lldb_executable)
+ 
+Index: llvm-toolchain-3.9-3.9.1/lldb/source/Plugins/SymbolFile/PDB/CMakeLists.txt
+===================================================================
+--- llvm-toolchain-3.9-3.9.1.orig/lldb/source/Plugins/SymbolFile/PDB/CMakeLists.txt
++++ llvm-toolchain-3.9-3.9.1/lldb/source/Plugins/SymbolFile/PDB/CMakeLists.txt
+@@ -1,6 +1,3 @@
+-set(LLVM_PRIVATE_LINK_COMPONENTS
+-    DebugInfoPDB)
+-
+ add_lldb_library(lldbPluginSymbolFilePDB
+   PDBASTParser.cpp
+   SymbolFilePDB.cpp
