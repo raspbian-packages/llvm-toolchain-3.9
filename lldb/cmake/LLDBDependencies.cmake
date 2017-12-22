@@ -208,6 +208,7 @@ set(LLVM_LINK_COMPONENTS
   option
   support
   coverage
+  DebugInfoPDB
   )
 
 if ( NOT LLDB_DISABLE_PYTHON )
