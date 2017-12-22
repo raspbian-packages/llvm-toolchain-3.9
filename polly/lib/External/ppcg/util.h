@@ -10,4 +10,10 @@ static inline int prefixcmp(const char *s, const char *prefix)
 	return strncmp(s, prefix, strlen(prefix));
 }
 
+// For GNU Hurd
+#if defined(__GNU__) && !defined(PATH_MAX)
+# define PATH_MAX 4096
+#endif
+
+
 #endif
