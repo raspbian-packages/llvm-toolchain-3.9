@@ -190,11 +190,11 @@ void test18() {
 
   ptr = __builtin___memccpy_chk(dst, src, '\037', sizeof(src), sizeof(dst));
   result = __builtin___strlcpy_chk(dst, src, sizeof(dst), sizeof(dst));
-  result = __builtin___strlcat_chk(dst, src, sizeof(dst), sizeof(dst));
+//  result = __builtin___strlcat_chk(dst, src, sizeof(dst), sizeof(dst));
 
   ptr = __builtin___memccpy_chk(dst, src, '\037', sizeof(src));      // expected-error {{too few arguments to function call}}
   ptr = __builtin___strlcpy_chk(dst, src, sizeof(dst), sizeof(dst)); // expected-warning {{incompatible integer to pointer conversion}}
-  ptr = __builtin___strlcat_chk(dst, src, sizeof(dst), sizeof(dst)); // expected-warning {{incompatible integer to pointer conversion}}
+//  ptr = __builtin___strlcat_chk(dst, src, sizeof(dst), sizeof(dst)); // expected-warning {{incompatible integer to pointer conversion}}
 }
 
 void no_ms_builtins() {
@@ -209,12 +209,12 @@ void unavailable() {
 }
 
 // rdar://18259539
-size_t strlcpy(char * restrict dst, const char * restrict src, size_t size);
-size_t strlcat(char * restrict dst, const char * restrict src, size_t size);
+//size_t strlcpy(char * restrict dst, const char * restrict src, size_t size);
+//size_t strlcat(char * restrict dst, const char * restrict src, size_t size);
 
 void Test19(void)
 {
-        static char b[40];
+/*        static char b[40];
         static char buf[20];
 
         strlcpy(buf, b, sizeof(b)); // expected-warning {{size argument in 'strlcpy' call appears to be size of the source; expected the size of the destination}} \\
@@ -229,6 +229,7 @@ void Test19(void)
         __builtin___strlcat_chk(buf, b, sizeof(b), __builtin_object_size(buf, 0)); // expected-warning {{size argument in '__builtin___strlcat_chk' call appears to be size of the source; expected the size of the destination}} \
                                                                                    // expected-note {{change size argument to be the size of the destination}} \
 				                                                   // expected-warning {{'__builtin___strlcat_chk' will always overflow destination buffer}}
+                                                                   */
 }
 
 // rdar://11076881
