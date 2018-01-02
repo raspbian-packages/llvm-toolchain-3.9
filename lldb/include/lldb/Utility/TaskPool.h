@@ -33,6 +33,7 @@
 #include <queue>
 #include <thread>
 #include <vector>
+#include <functional>
 
 // Global TaskPool class for running tasks in parallel on a set of worker thread created the first
 // time the task pool is used. The TaskPool provide no gurantee about the order the task will be run

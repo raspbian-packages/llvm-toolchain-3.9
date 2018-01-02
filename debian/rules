@@ -5,7 +5,10 @@ DEB_INST		:= $(CURDIR)/debian/tmp/
 #GCC_VERSION     := 4.8
 # The 5|6| in the regexp is a crappy workaround. g++ 5.2 in Debian is not providing a g++-5.2 binary (only g++-5)
 # accomodate that by hardcoding the 5 detection
-GCC_VERSION     := $(shell dpkg-query -W -f '$${Version}' g++ | sed -rne 's,^([0-9]+:)?(5|6|[0-9]+\.[0-9]+|[0-9]+).*$$,\2,p')
+GXX_VERSIONED_PACKAGE    := $(shell dpkg-query -W -f '$${Depends}' g++ | grep -o 'g++-[0-9][0-9.]*' | tail -n1 )
+GXX_VERSIONED_EXECUTABLE := $(shell dpkg -L $(GXX_VERSIONED_PACKAGE) | grep '/usr/bin/g++-[0-9][0-9.]*' | xargs ls -d | tail -n1 )
+GCC_VERSION              := $(subst /usr/bin/g++-,,$(GXX_VERSIONED_EXECUTABLE))
+
 LLVM_VERSION	:= 3.9
 LLVM_VERSION_FULL := $(LLVM_VERSION).1
 SONAME_EXT      := 1
@@ -31,11 +34,21 @@ ifneq (,$(filter $(DEB_HOST_ARCH),powerpc powerpcspe))
 LDFLAGS_EXTRA += -latomic
 endif
 
+# Only enable gsplit dwarf on archs which needs it (32 bits)
+ifeq ($(DEB_HOST_ARCH_BITS),32)
 ifeq ($(shell dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' binutils) ge 2.22.52.0.4 ; echo $$?),0)
 # when using -gsplit-dwarf, it will requires extract-dwo which doesn't exist on precise:
 # More: https://llvm.org/bugs/show_bug.cgi?id=28841
+ifeq ($(shell dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' g++-$(GCC_VERSION)) lt 7.1.0-7~ || \
+	dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' g++-$(GCC_VERSION)) ge 7.2.0-2; echo $$?),0)
+# Only pass -gsplit-dwarf with working version of gcc 7
+# More: https://bugs.llvm.org/show_bug.cgi?id=34140 & https://bugs.debian.org/873609
 CXXFLAGS_EXTRA += -gsplit-dwarf
-endif
+else
+$(error "Broken gcc version for -gsplit-dwarf support. Please use < gcc 7 or >= 7.2.0-2")
+endif # < gcc 7 or >= 7.2.0-2
+endif # binutils
+endif # archs
 
 ifeq ($(shell dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' g++-$(GCC_VERSION)) lt 4.7.2-10~ ; echo $$?),0)
 # Too old version of gcc. Force 4.9
@@ -45,12 +58,16 @@ endif
 export CC=gcc-$(GCC_VERSION)
 export CXX=g++-$(GCC_VERSION)
 
-opt_flags = -g -O2
+opt_flags = -O2 -DNDEBUG
+
 ifneq (,$(findstring $(DEB_HOST_ARCH),armel))
   opt_flags += -marm
   # 3.8 fails to build, disable the compiler_rt builtins
   # See http://lists.llvm.org/pipermail/llvm-dev/2016-May/099761.html
   CMAKE_EXTRA += -DCOMPILER_RT_BUILD_BUILTINS=OFF
+  # Prevent clang from getting a > v4t default
+  # See bug #868779
+  CMAKE_EXTRA += -DLLVM_HOST_TRIPLE=arm-linux-gnueabi
 endif
 
 ifeq ($(shell dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' g++-$(GCC_VERSION)) ge 4.8-20121128-1~ ; echo $$?),0)
@@ -63,12 +80,12 @@ else
 	control_vars = '-Vdep:devlibs=libstdc++6-$(GCC_VERSION)-dev'
 endif
 
-BINUTILS_GOLD_ARCHS := amd64 armhf i386 powerpcspe ppc64 ppc64el sparc sparc64 x32
+BINUTILS_GOLD_ARCHS := amd64 arm64 armhf i386 powerpcspe ppc64 ppc64el sparc sparc64 x32 s390x
 ifeq ($(shell dpkg --compare-versions $(shell dpkg-query -W -f '$${Version}' binutils) ge 2.23.1-1~exp3 ; echo $$?),0)
 ifneq (,$(filter $(DEB_HOST_ARCH),$(BINUTILS_GOLD_ARCHS)))
 # -fused-ld=gold enables the gold linker (but is not supported by all archs / distro)
-	LDFLAGS_EXTRA += -fuse-ld=gold
-	CXXFLAGS_EXTRA += -Wl,-fuse-ld=gold
+	LDFLAGS_EXTRA += -fuse-ld=gold --no-keep-files-mapped --no-map-whole-files
+	CXXFLAGS_EXTRA += -fuse-ld=gold -Wl,--no-keep-files-mapped -Wl,--no-map-whole-files
 	CMAKE_EXTRA += -DLLVM_BINUTILS_INCDIR=/usr/include/
 endif
 endif
@@ -135,9 +152,9 @@ OCAML_ENABLE= no
 OCAML_ARCHS := amd64 arm64 armel armhf i386
 ifneq (,$(filter $(DEB_HOST_ARCH),$(OCAML_ARCHS)))
 # Enable OCAML for this arch.
-	OCAML_ENABLE=yes
-	OCAML_STDLIB_DIR    ?= $(shell ocamlc -where)
-	DH_OPTIONS=--with ocaml
+#	OCAML_ENABLE=yes
+#	OCAML_STDLIB_DIR    ?= $(shell ocamlc -where)
+#	DH_OPTIONS=--with ocaml
 endif
 
 
@@ -241,6 +258,7 @@ override_dh_auto_configure: preconfigure
 	-DCMAKE_INSTALL_PREFIX=/usr/lib/llvm-$(LLVM_VERSION) \
 	-DCMAKE_VERBOSE_MAKEFILE=ON \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	-DCMAKE_CXX_FLAGS_RELWITHDEBINFO="$(opt_flags)" \
 	-DCMAKE_CXX_FLAGS='$(CXXFLAGS_EXTRA)' \
 	-DLLVM_LINK_LLVM_DYLIB=ON \
 	-DLLVM_INSTALL_UTILS=ON \
@@ -301,7 +319,7 @@ build_doc:
 	CMDS="llvm-dwarfdump llvm-mc llvm-mcmarkup llvm-objdump llvm-rtdyld llvm-size llvm-ranlib lldb lldb-mi clang-format clang clang-tblgen clang-check clang-tidy clang-apply-replacements clang-rename clang-query pp-trace sancov lli modularize clang-include-fixer find-all-symbols"; \
 	for f in $$CMDS; do \
 		echo "Generating manpage of $$f"; \
-		LD_LIBRARY_PATH=$(DEB_INST)/usr/lib/llvm-$(LLVM_VERSION)/lib/:/usr/lib/*/libfakeroot help2man --no-info --version-string=$(LLVM_VERSION) --no-discard-stderr $(TARGET_BUILD)/bin/$$f > debian/man/$$f-$(LLVM_VERSION).1; \
+		LD_LIBRARY_PATH=$(DEB_INST)/usr/lib/llvm-$(LLVM_VERSION)/lib/:/usr/lib/*/libfakeroot help2man --no-info --version-string=$(LLVM_VERSION) $(TARGET_BUILD)/bin/$$f > debian/man/$$f-$(LLVM_VERSION).1; \
 	done
 
 override_dh_auto_install:
